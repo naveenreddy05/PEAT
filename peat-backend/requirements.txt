@@ -1,0 +1,6 @@
+flask==3.0.0
+flask-cors==4.0.0
+pyelftools==0.31
+yara-python==4.5.0
+python-magic==0.4.27
+requests==2.31.0
