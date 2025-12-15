@@ -20,9 +20,6 @@ rule Gafgyt_Bashlite
         $cmd3 = "HTTPFLOOD" ascii
         $cmd4 = "LOLNOGTFO" ascii
 
-        $net1 = "PING " ascii
-        $net2 = "DUP" ascii
-
     condition:
         uint32(0) == 0x464c457f and
         (
