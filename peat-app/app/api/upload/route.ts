@@ -16,7 +16,7 @@ async function ensureUploadDir() {
 // Validate file type and size
 function validateFile(file: File): { valid: boolean; error?: string } {
   const MAX_SIZE = 500 * 1024 * 1024; // 500MB
-  const ALLOWED_EXTENSIONS = ['.dump', '.bin', '.mem', '.raw', '.dmp', '.lime'];
+  const ALLOWED_EXTENSIONS = ['.dump', '.bin', '.mem', '.raw', '.dmp', '.lime', '.elf', '.exe', '.out', '.o', '.so', '.dylib'];
 
   // Check size
   if (file.size > MAX_SIZE) {
@@ -26,12 +26,12 @@ function validateFile(file: File): { valid: boolean; error?: string } {
     };
   }
 
-  // Check extension
+  // Check extension (allow files without extension for Linux binaries)
   const ext = path.extname(file.name).toLowerCase();
-  if (!ALLOWED_EXTENSIONS.includes(ext)) {
+  if (ext && !ALLOWED_EXTENSIONS.includes(ext)) {
     return {
       valid: false,
-      error: `Invalid file type. Allowed: ${ALLOWED_EXTENSIONS.join(', ')}`
+      error: `Invalid file type. Allowed: binary files (.bin, .elf, .exe, etc.)`
     };
   }
 
