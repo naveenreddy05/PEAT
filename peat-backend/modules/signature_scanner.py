@@ -65,11 +65,14 @@ class SignatureScanner:
 
                 # Extract matched strings (limit to first 10)
                 for string_match in match.strings[:10]:
-                    match_data['strings'].append({
-                        'offset': hex(string_match[0]),
-                        'identifier': string_match[1],
-                        'data': string_match[2].decode('utf-8', errors='ignore')[:100]
-                    })
+                    # YARA StringMatch objects have attributes, not tuple indices
+                    for instance in string_match.instances:
+                        match_data['strings'].append({
+                            'offset': hex(instance.offset),
+                            'identifier': string_match.identifier,
+                            'data': instance.matched_data.decode('utf-8', errors='ignore')[:100]
+                        })
+                        break  # Only take first instance of each string
 
                 results['matches'].append(match_data)
 

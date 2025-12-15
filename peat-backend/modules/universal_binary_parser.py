@@ -169,7 +169,7 @@ class UniversalBinaryParser:
             'dynamic': []
         }
 
-    def _extract_strings(self, min_length=4):
+    def _extract_strings(self, min_length=6):
         """Extract printable strings from the binary"""
         strings = []
         try:
@@ -182,12 +182,17 @@ class UniversalBinaryParser:
                         current_string.append(chr(byte))
                     else:
                         if len(current_string) >= min_length:
-                            strings.append(''.join(current_string))
+                            candidate = ''.join(current_string)
+                            # Filter out pure assembly artifacts (all uppercase + special chars only)
+                            if not all(c in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ$_[]' for c in candidate):
+                                strings.append(candidate)
                         current_string = []
 
                 if len(current_string) >= min_length:
-                    strings.append(''.join(current_string))
+                    candidate = ''.join(current_string)
+                    if not all(c in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ$_[]' for c in candidate):
+                        strings.append(candidate)
         except Exception as e:
             print(f"String extraction error: {e}")
 
-        return strings[:200]  # Limit to first 200 strings
+        return strings[:1000]  # Extract more strings for better IoC detection
